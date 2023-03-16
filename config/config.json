@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "0781110784",
+    "database": "libraryapp",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "0781110784",
+    "database": "libraryapp",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "0781110784",
+    "database": "libraryapp",
+    "host": "localhost",
+    "dialect": "postgres"
+  }
+}
