@@ -38,7 +38,7 @@
 //     console.log("server is listening to port http://localhost:3000");
 // });
 
-const {sequelize,Users,BooksTbs,BrowerTb} =require('../models');
+const {sequelize,Users,BooksTb,BrowerTb} =require('../models');
 const express =require('express');
 const app=express();
  
@@ -53,10 +53,10 @@ app.get('/', (req,res)=>{
 
 //add new user 
 app.post('/users',async (req,res) =>{
- const{id,names,email}=req.body;
+ const{names,email}=req.body;
 
  try{
-    const newUser =await Users.create({id,names,email});
+    const newUser =await Users.create({names,email});
 
      return res.status(201).json({
        message:"user created",
@@ -103,7 +103,7 @@ app.get('/Users/:id',async(req,res)=>{
 //add new book
 
 app.post('/addBook',async(req,res)=>{
-const {useruuId,bookisbn,bookauthor,booktitle,bookgnre}=req.body;
+const {useruuId,bookisbn,booktitle,bookgnre}=req.body;
 
 try{
     const user=await Users.findOne({where :{id:useruuId}})
@@ -113,7 +113,7 @@ try{
       });
      }
 
-    const newbook=await BooksTbs.create({bookisbn,bookauthor,booktitle,bookgnre,userId : user.id})
+    const newbook=await BooksTb.create({bookisbn,booktitle,bookgnre,userId : user.id})
 
     return res.status(201).json({
       message:"new book added",
@@ -131,7 +131,7 @@ try{
 
 app.get('/AllBooks',async(req,res)=>{
   try{
-        const books=await BooksTbs.findAll()
+        const books=await BooksTb.findAll()
 
         return res.json(books);
 
@@ -146,7 +146,7 @@ app.get('/AllBooks',async(req,res)=>{
 app.get('/book/:id',async (req,res)=>{
   const id=req.params.id
   try{
-    const book=await BooksTbs.findOne({
+    const book=await BooksTb.findOne({
        where:{id}
     })
 
@@ -170,7 +170,7 @@ return res.status(500).json(err)
 app.get('/allbookAddedBy/:userId',async (req,res)=>{
   const userId=req.params.userId
   try{
-    const book=await BooksTbs.findAll({
+    const book=await BooksTb.findAll({
        where:{userId},
       
     })

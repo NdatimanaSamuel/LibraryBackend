@@ -16,13 +16,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   BooksTb.init({
     bookisbn: DataTypes.STRING,
-    bookauthor: DataTypes.STRING,
     booktitle: DataTypes.STRING,
     bookgnre: DataTypes.STRING,
     userId: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'BooksTbs',
+    modelName: 'BooksTb',
   });
   return BooksTb;
 };
