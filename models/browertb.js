@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   BrowerTb.init({
     bookisbn: DataTypes.STRING,
-    userId: DataTypes.INTEGER
+    userId: DataTypes.INTEGER,
+  
   }, {
     sequelize,
     modelName: 'BrowerTb',

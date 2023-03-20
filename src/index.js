@@ -88,7 +88,8 @@ app.get('/Users/:id',async(req,res)=>{
   const id=req.params.id
   try{
         const user=await Users.findOne({
-           where:{id}
+           where:{id},
+           include:'books'
         })
 
         return res.json(user);
@@ -103,7 +104,7 @@ app.get('/Users/:id',async(req,res)=>{
 //add new book
 
 app.post('/addBook',async(req,res)=>{
-const {useruuId,bookisbn,booktitle,bookgnre}=req.body;
+const {useruuId,bookisbn,booktitle,bookgnre,bookstatus}=req.body;
 
 try{
     const user=await Users.findOne({where :{id:useruuId}})
@@ -113,7 +114,7 @@ try{
       });
      }
 
-    const newbook=await BooksTb.create({bookisbn,booktitle,bookgnre,userId : user.id})
+    const newbook=await BooksTb.create({bookisbn,booktitle,bookgnre,userId : user.id,bookstatus})
 
     return res.status(201).json({
       message:"new book added",
@@ -194,21 +195,44 @@ return res.status(500).json(err)
 
 // borrow book to one person
 app.post('/borrowbook',async(req,res)=>{
-  const {useruuId,bookisbn}=req.body;
+  const {useruuId,bookisbn,bookchangestatus}=req.body;
+
   try{
+    const book=await BooksTb.findOne({where:{bookisbn:bookisbn}});
+
     const user=await Users.findOne({where :{id:useruuId}})
+
      if(!user){
       return res.status(404).json({
         message: `this user id: ${useruuId} was not found`
       });
      }
 
+     if(!book){
+      return res.status(404).json({
+        message: `this book  isbn: ${bookisbn} was not found`
+      });
+     }
+    //  if(book.bookstatus="taken"){
+    //   return res.status(404).json({
+    //     message: `this book wth this isbn: ${bookisbn} was taken`
+    //   });
+    //  }
+
+   else{
     const newborrow=await BrowerTb.create({bookisbn,userId : user.id})
+    // book.bookstatus=bookchangestatus
+
+    // await book.save()
+    // id
+    // const bookisbn = bookisbn;
+    // const booK = await BooksTb.findByIdAndUpdate(bookisbn,{bookchangestatus}, { new: true });
 
     return res.status(201).json({
       message:" borrowed successfully",
       data:newborrow
     })
+  }
 
   }catch(err){
     console.log("error "+err);
@@ -263,6 +287,68 @@ app.get('/borrowedbookbyuserid/:userId',async (req,res)=>{
     }
   }
 
+
+});
+
+
+//make user delete
+
+app.delete('/removeuser/:id',async (req,res) =>{
+
+   const id=req.params.id;
+
+  try{
+
+    const user=await Users.findOne({where: {id}});
+    if(!user){
+      return res.status(404).json({
+        message:`user with id : ${id} does not exit `
+    })
+  }
+
+  else{
+   await user.destroy()
+   return res.json({
+    message:"user removed successfully"
+   })
+
+  }
+
+  }catch(err){
+    console.log("error "+ err);
+      return res.status(500).json(err);
+
+  }
+
+
+});
+
+//update user 
+app.put('/updateuser/:id',async (req,res) =>{
+ const id=req.params.id;
+ const{names,email}=req.body;
+ try{
+   const user=await Users.findOne({where :{id}})
+
+   if(!user){
+    return res.status(404).json({
+      message:`user with id : ${id} does not exit `
+  })}
+  user.names=names
+  user.email=email
+
+  await user.save()
+
+  return res.status(200).json({
+    message:"user updated",
+    data:user
+  }) 
+  
+ }catch(err){
+  console.log("Eroor" +err)
+    res.status(500).json(err);
+  
+ }
 
 });
 

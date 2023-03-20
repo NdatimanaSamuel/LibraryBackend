@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     bookisbn: DataTypes.STRING,
     booktitle: DataTypes.STRING,
     bookgnre: DataTypes.STRING,
-    userId: DataTypes.INTEGER
+    userId: DataTypes.INTEGER,
+    bookstatus:DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'BooksTb',

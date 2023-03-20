@@ -21,6 +21,9 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER
       },
+      bookstatus:{
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
